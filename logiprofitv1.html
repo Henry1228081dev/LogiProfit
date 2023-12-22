@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Profit/Loss Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            text-align: center;
+            color: #fff; /* Default text color in dark mode */
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        .calculator-container {
+            background-color: #333;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #fff; /* Label text color in dark mode */
+        }
+
+        input[type="number"], input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #fff; /* Result text color in dark mode */
+        }
+
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #000;
+            color: #fff; /* Text color in dark mode */
+        }
+
+        .dark-mode button {
+            background-color: #444;
+        }
+
+        .dark-mode button:hover {
+            background-color: #555;
+        }
+
+        /* Cool effects for sign-up page */
+        .sign-up-page {
+            display: none;
+        }
+
+        .sign-up-title {
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            color: #fff;
+        }
+
+        .sign-up-title:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Logistics Profit/Loss Calculator</h1>
+
+    <!-- Login/Sign-up Page (For Demo) -->
+    <div>
+        <label for="username">Enter your name:</label>
+        <input type="text" id="username" placeholder="Your Name">
+    </div>
+    <button onclick="login()">Login / Sign up</button>
+
+    <!-- Sign-up Page (Hidden by default) -->
+    <div class="calculator-container sign-up-page" id="signUpPage">
+        <div class="sign-up-title" onclick="toggleSignUpPage()">Unlock Advanced Features!</div>
+        <div id="greeting"></div>
+        <form>
+            <label for="signupName">Name:</label>
+            <input type="text" id="signupName" placeholder="Your Full Name">
+            <label for="signupUsername">Username:</label>
+            <input type="text" id="signupUsername" placeholder="Choose a Username">
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" placeholder="Create a Password">
+        </form>
+        <button onclick="proceedToCalculator()">Proceed</button>
+    </div>
+
+    <!-- Calculator Container (Hidden by default) -->
+    <div class="calculator-container" id="calculator">
+        <!-- Dark mode switch -->
+        <label for="darkModeToggle">Dark Mode:</label>
+        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+        <br>
+
+        <div id="greeting"></div>
+        
+        <label for="itemCount">Number of Items Bought:</label>
+        <input type="number" id="itemCount" min="0" placeholder="Enter quantity">
+
+        <label for="buyPrice">Price Bought per Item:</label>
+        <input type="number" id="buyPrice" min="0" placeholder="Enter price">
+
+        <label for="sellPrice">Price Sold per Item:</label>
+        <input type="number" id="sellPrice" min="0" placeholder="Enter price">
+
+        <button onclick="calculateProfitLoss()">Calculate</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let username = "";
+        let isLoggedIn = false;
+
+        function login() {
+            username = document.getElementById("username").value;
+            if (username.trim() === "") {
+                alert("Please enter your name.");
+            } else {
+                document.getElementById("greeting").textContent = `Hello, ${username}!`;
+                isLoggedIn = true;
+                document.getElementById("signUpPage").style.display = "block";
+            }
+        }
+
+        function toggleSignUpPage() {
+            document.getElementById("signUpPage").style.display = "block";
+        }
+
+        function proceedToCalculator() {
+            if (!isLoggedIn) {
+                alert("Please login/sign up first.");
+                return;
+            }
+
+            document.getElementById("signUpPage").style.display = "none";
+            document.getElementById("calculator").style.display = "block";
+            alert("Thanks for your interest! More features coming soon.");
+        }
+
+        function calculateProfitLoss() {
+            if (!isLoggedIn) {
+                alert("Please login/sign up first.");
+                return;
+            }
+
+            const itemCount = parseFloat(document.getElementById("itemCount").value);
+            const buyPrice = parseFloat(document.getElementById("buyPrice").value);
+            const sellPrice = parseFloat(document.getElementById("sellPrice").value);
+
+            const profitLoss = (sellPrice - buyPrice) * itemCount;
+
+            const resultElement = document.getElementById("result");
+            if (!isNaN(profitLoss)) {
+                resultElement.textContent = `You have made a profit of $${profitLoss.toFixed(2)}.`;
+            } else {
+                resultElement.textContent = `You have made a loss of $${Math.abs(profitLoss).toFixed(2)}.`;
+            }
+        }
+
+        function toggleDarkMode() {
+            const darkModeToggle = document.getElementById("darkModeToggle");
+            const elementsToToggle = document.querySelectorAll(".dark-mode");
+
+            if (darkModeToggle.checked) {
+                for (const element of elementsToToggle) {
+                    element.classList.add("dark-mode");
+                }
+                document.body.style.backgroundColor = "#000"; // Set background to black
+            } else {
+                for (const element of elementsToToggle) {
+                    element.classList.remove("dark-mode");
+                }
+                document.body.style.backgroundColor = "#f2f2f2"; // Set background to light gray
+            }
+        }
+    </script>
+</body>
+</html>
+
